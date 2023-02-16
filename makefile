@@ -4,10 +4,16 @@ LFLAGS=
 
 all : mygrep
 
-mygrep : main.o 
+mygrep : main.o recherche.o utilitaire.o 
 	$(CC) $^ -o $@
-main.o : main.c
+main.o : main.c recherche.h utilitaire.h
 	$(CC) $(CFLAGS) $<
+recherche.o : recherche.c recherche.h
+	$(CC) $(CFLAGS) $<
+utilitaire.o : utilitaire.c utilitaire.h
+	$(CC) $(CFLAGS) $<
+
+%.o : macro.h
 
 clean :
 	rm -f *.o mygrep
