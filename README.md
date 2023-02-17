@@ -5,9 +5,10 @@ Version personnel de la commande grep sur linux
 commande : make
 
 ## Version Actuelle :
-Version 0:
+Version 1:
 
-le programme est capable de chercher un motif dans un plusieurs fichiers sans options
+le programme est capable de chercher un motif dans un ou plusieurs fichiers sans options
+le programme reconnaît les deux caractères ^ et $ dans un motif
 
 Pour tester:
 
