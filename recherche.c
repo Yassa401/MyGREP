@@ -33,15 +33,64 @@ int chercher_motif(char * motif, char * ligne){
     return 0 ;
 }
 
+/*! Fonction qui cherche le motif au debut de la ligne
+ * si c'est le cas on renvoie 1
+ * sinon 0
+ */
+int chercher_motif_debut(char * motif, char * ligne){
+    int i ;
+    for (i = 1 ; i < (int) strlen(motif) ; i++){
+        if ( *(motif + i) != *(ligne + i - 1) ){
+            return 0 ;
+        }
+    }
+    return 1;
+}
+
+/*! Fonction qui cherche le motif a la fin de ligne
+ * si c'est le cas on renvoie 1
+ * sinon 0
+ */
+int chercher_motif_fin(char * motif , char * ligne){
+    int i , j ;
+    j = strlen(ligne) - 1 ;
+    for ( i = strlen(motif) - 2 ; i > 0 ; i--){
+        if ( *(motif + i) != *(ligne + j ) ){
+            return 0 ;
+        }
+        j -= 1 ;
+    }
+    return 1 ;
+}
+
+int chercher_motif_debut_fin(char * motif, char * ligne){
+    int i = 1;
+    /*si debut des deux chaines sont pareils on parcours le reste*/
+    if ( *(motif + i) == *(ligne + i - 1)){
+        for ( i = 2 ; i < (int) (strlen(motif) - 1) ; i++ ){
+            /*On arrete si deux caracteres au meme indice sont differents*/
+            if ( *(motif + i) != *(ligne + i - 1)){
+                return 0 ;
+            }
+        }
+        /*On verifie bien que le motif sans "^" et "$" a la meme longueur que la ligne*/
+        if ( strlen(ligne) == (strlen(motif) - 2)){
+            return 1 ;
+        }
+    }
+    return 0 ;
+}
+
 /*! Fonction qui récupère ligne par ligne de un fichier donné
  * et cherche le motif dans chaque ligne
  * ne renvoie rien
  */
 void recherche_fichier(char * nom_fichier ,FILE * fichier, char * motif){
-    int i = 0;
+    int i = 0 ;
     char car ;
-    char * ligne = (char *) calloc(NB_CHAR,sizeof(char)) ;
-    /* lecture d'un caractere par caractere dans le fichier et constitue un ligne
+    char * ligne = (char *) calloc( NB_CHAR,sizeof(char) ) ;
+
+    /* lecture d'un caractere par caractere dans le fichier et constitue une ligne
     si on arrive a un saut de ligne */
     car = fgetc(fichier) ;
     while( car != EOF){
@@ -50,15 +99,34 @@ void recherche_fichier(char * nom_fichier ,FILE * fichier, char * motif){
             while (car == '\n'){
                 car =fgetc(fichier) ;
             }
-            i++;
-            *(ligne + i) = '\0' ;
+            *(ligne + i ) = '\0' ;
             i = 0 ;
-            /* si ligne construit , on recherche le motif la dedans on faisant appel a la
-            fonction precedente 
+            /* si ligne construit , on recherche le motif la dedans on faisant appel 
+            a une des fonctions de recherche de motif dans une ligne 
             */
-            if (chercher_motif(motif, ligne)){
-                printf("\033[34;01m%s\033[00m :%s \n",nom_fichier ,ligne);
+            /* si le motif commence par "^" on cherche le motif au debut de la ligne*/
+            if ( *(motif) == '^' && *(motif + strlen(motif) - 1) == '$' ){
+                if ( chercher_motif_debut_fin(motif, ligne) ){
+                    printf("\033[34;01m%s:\033[00m--%s-- \n",nom_fichier ,ligne);    
+                }
             }
+            else{
+                if ( *(motif) == '^'){
+                    if ( chercher_motif_debut(motif, ligne) ){
+                        printf("\033[34;01m%s:\033[00m--%s-- \n",nom_fichier ,ligne);
+                    }
+                }
+                if ( *(motif + strlen(motif) - 1) == '$'){
+                    if ( chercher_motif_fin(motif, ligne) ){
+                        printf("\033[34;01m%s:\033[00m--%s-- \n",nom_fichier ,ligne);
+                    }
+                }
+                else {
+                    if ( chercher_motif(motif, ligne) ){
+                        printf("\033[34;01m%s:\033[00m--%s-- \n",nom_fichier ,ligne);
+                    }
+                }
+            } 
         }
         *(ligne + i) = car ;
         i++;

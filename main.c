@@ -13,7 +13,6 @@ int main(int argc, char **argv){
 
     /*printf("motif = %s et fichier = %s \n",*(argv + 1), *(argv + 2)) ;*/
     motif = *(argv + 1) ;
-    
     recherche_fichiers(argc , argv, motif);
 
     exit(EXIT_SUCCESS) ; 
