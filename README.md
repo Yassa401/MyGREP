@@ -8,6 +8,7 @@ commande : make
 Version 1:
 
 le programme est capable de chercher un motif dans un ou plusieurs fichiers sans options
+
 le programme reconnaît les deux caractères ^ et $ dans un motif
 
 Pour tester:
