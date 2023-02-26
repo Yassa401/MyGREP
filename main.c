@@ -7,13 +7,15 @@
 #include "utilitaire.h"
 
 
-int main(int argc, char **argv){
+int main(int argc,char **argv){
     char * motif ;
+    int indice_arg = 1 ;
     usage(argc, argv) ;
-
-    /*printf("motif = %s et fichier = %s \n",*(argv + 1), *(argv + 2)) ;*/
-    motif = *(argv + 1) ;
-    recherche_fichiers(argc , argv, motif);
+    traitement_option(argc , argv, &indice_arg) ;
+    motif = *( argv + indice_arg) ;
+    printf("--%s--\n", motif) ;
+    indice_arg += 1 ;
+    recherche_fichiers(argc , argv, motif, indice_arg );
 
     exit(EXIT_SUCCESS) ; 
 }

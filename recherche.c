@@ -5,6 +5,7 @@ Date de création : 15/02/2023
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <getopt.h>
 #include "macro.h"
 #include "recherche.h"
 
@@ -107,23 +108,23 @@ void recherche_fichier(char * nom_fichier ,FILE * fichier, char * motif){
             /* si le motif commence par "^" on cherche le motif au debut de la ligne*/
             if ( *(motif) == '^' && *(motif + strlen(motif) - 1) == '$' ){
                 if ( chercher_motif_debut_fin(motif, ligne) ){
-                    printf("\033[34;01m%s:\033[00m--%s-- \n",nom_fichier ,ligne);    
+                    printf("\033[31;01m%s\033[34m:\033[00m%s \n",nom_fichier ,ligne);    
                 }
             }
             else{
                 if ( *(motif) == '^'){
                     if ( chercher_motif_debut(motif, ligne) ){
-                        printf("\033[34;01m%s:\033[00m--%s-- \n",nom_fichier ,ligne);
+                        printf("\033[31;01m%s\033[34m:\033[00m%s \n",nom_fichier ,ligne);
                     }
                 }
                 if ( *(motif + strlen(motif) - 1) == '$'){
                     if ( chercher_motif_fin(motif, ligne) ){
-                        printf("\033[34;01m%s:\033[00m--%s-- \n",nom_fichier ,ligne);
+                        printf("\033[31;01m%s\033[34m:\033[00m%s \n",nom_fichier ,ligne);
                     }
                 }
                 else {
                     if ( chercher_motif(motif, ligne) ){
-                        printf("\033[34;01m%s:\033[00m--%s-- \n",nom_fichier ,ligne);
+                        printf("\033[31;01m%s\033[34m:\033[00m%s \n",nom_fichier ,ligne);
                     }
                 }
             } 
@@ -140,12 +141,12 @@ void recherche_fichier(char * nom_fichier ,FILE * fichier, char * motif){
  * et cherche le motif dans chacun des fichiers
  * ne renvoie rien
  */
-void recherche_fichiers(int argc , char **argv, char * motif){
+void recherche_fichiers(int argc ,char **argv, char * motif, int indice_arg){
     int i ;
     FILE * fichier = NULL ;
     /* Parcours les differents fichiers un à un pour les ouvrir 
     en mode lecture seulement */
-    for (i = 2 ; i < argc ; i++){
+    for (i = indice_arg ; i < argc ; i++){
         fichier = fopen(*(argv + i) ,"r") ;
         if (fichier == NULL){
             printf("Impossible de lire le fichier %s ! \n",*(argv + i)) ;
