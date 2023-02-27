@@ -7,6 +7,7 @@ Date de création : 15/02/2023
 #include <stdlib.h>
 #include <getopt.h>
 #include "utilitaire.h"
+#include "recherche_sans_affiche.h"
 
 void usage(int argc, char **argv){
     if (argc < 3){
@@ -35,8 +36,9 @@ void traitement_option(int argc ,char **argv, int * indice_arg){
                 *indice_arg += 1 ;
                 break ;
             case 'c' :
-                printf("option -c pris en charge \n");
+                printf("option -c pris en charge \n") ;
                 *indice_arg += 1 ;
+                recherche_fichiers_option_c(argc ,argv, *indice_arg) ;
                 break ;
             case 'h' :
                 printf("option -h pris en charge \n");

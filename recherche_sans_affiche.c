@@ -4,6 +4,8 @@ Date de création : 26/02/2023
 */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include "macro.h"
 #include "recherche.h"
 
 
@@ -12,7 +14,7 @@ Date de création : 26/02/2023
  * renvoie 1 si au moins une ligne trouvees
  * sinon renvoie 0
  */
-int recherche_fichier_sans_affiche(char * nom_fichier ,FILE * fichier, char * motif, int * compte_ligne){
+int recherche_fichier_sans_affiche(FILE * fichier, char * motif, int * compte_ligne){
     int i = 0 ;
     char car ;
     char * ligne = (char *) calloc( NB_CHAR,sizeof(char) ) ;
@@ -62,7 +64,37 @@ int recherche_fichier_sans_affiche(char * nom_fichier ,FILE * fichier, char * mo
         *(ligne + i) = car ;
         i++;
         car = fgetc(fichier) ;
+        if ( car == EOF ){
+            *(ligne + i ) = '\0' ;
+            /* si ligne construit , on recherche le motif la dedans on faisant appel 
+            a une des fonctions de recherche de motif dans une ligne 
+            */
+            /* si le motif commence par "^" on cherche le motif au debut de la ligne*/
+            if ( *(motif) == '^' && *(motif + strlen(motif) - 1) == '$' ){
+                if ( chercher_motif_debut_fin(motif, ligne) ){
+                    *compte_ligne += 1 ;    
+                }
+            }
+            else{
+                if ( *(motif) == '^'){
+                    if ( chercher_motif_debut(motif, ligne) ){
+                        *compte_ligne += 1 ;    
+                    }
+                }
+                if ( *(motif + strlen(motif) - 1) == '$'){
+                    if ( chercher_motif_fin(motif, ligne) ){
+                        *compte_ligne += 1 ;
+                    }
+                }
+                else {
+                    if ( chercher_motif(motif, ligne) ){
+                        *compte_ligne += 1 ;    
+                    }
+                }
+            }
+        }
     }
+    free(ligne) ;
     /*si la valeur de compte_ligne différente de 0 , le motif est trouve
     au moins une fois dans le fichier
     */
@@ -76,9 +108,12 @@ int recherche_fichier_sans_affiche(char * nom_fichier ,FILE * fichier, char * mo
  * et cherche le motif dans chacun des fichiers
  * ne renvoie rien
  */
-void recherche_fichiers(int argc ,char **argv, char * motif, int indice_arg){
-    int i ;
+void recherche_fichiers_option_c(int argc ,char **argv, int indice_arg){
+    int i , compte_ligne ;
     FILE * fichier = NULL ;
+    char * motif = *(argv + indice_arg) ;
+    indice_arg += 1 ;
+    compte_ligne = 0 ;
     /* Parcours les differents fichiers un à un pour les ouvrir 
     en mode lecture seulement */
     for (i = indice_arg ; i < argc ; i++){
@@ -90,7 +125,10 @@ void recherche_fichiers(int argc ,char **argv, char * motif, int indice_arg){
         /*si fichier ouvert, on cherche le motif la dedans en faisant 
         appel a la fonction precedente */
         else {
-            recherche_fichier(*(argv + i) ,fichier , motif ) ;
+            if( recherche_fichier_sans_affiche(fichier , motif, &compte_ligne ) ){
+                /* Le nom du fichier se trouve dans argv[i] */
+                printf("\033[35;01m%s\033[34m:\033[00m%d \n",*(argv + i), compte_ligne ) ;
+            } ;
             fclose(fichier) ;
         }
     }

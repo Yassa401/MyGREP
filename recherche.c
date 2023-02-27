@@ -132,8 +132,37 @@ void recherche_fichier(char * nom_fichier ,FILE * fichier, char * motif){
         *(ligne + i) = car ;
         i++;
         car = fgetc(fichier) ;
+        if (car == EOF){
+            *(ligne + i ) = '\0' ;
+            /* si ligne construit , on recherche le motif la dedans on faisant appel 
+            a une des fonctions de recherche de motif dans une ligne 
+            */
+            /* si le motif commence par "^" on cherche le motif au debut de la ligne*/
+            if ( *(motif) == '^' && *(motif + strlen(motif) - 1) == '$' ){
+                if ( chercher_motif_debut_fin(motif, ligne) ){
+                    printf("\033[31;01m%s\033[34m:\033[00m%s \n",nom_fichier ,ligne);    
+                }
+            }
+            else{
+                if ( *(motif) == '^'){
+                    if ( chercher_motif_debut(motif, ligne) ){
+                        printf("\033[31;01m%s\033[34m:\033[00m%s \n",nom_fichier ,ligne);
+                    }
+                }
+                if ( *(motif + strlen(motif) - 1) == '$'){
+                    if ( chercher_motif_fin(motif, ligne) ){
+                        printf("\033[31;01m%s\033[34m:\033[00m%s \n",nom_fichier ,ligne);
+                    }
+                }
+                else {
+                    if ( chercher_motif(motif, ligne) ){
+                        printf("\033[31;01m%s\033[34m:\033[00m%s \n",nom_fichier ,ligne);
+                    }
+                }
+            }
+        }
     }
-
+    free(ligne) ;
     return ;
 }
 
