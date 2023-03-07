@@ -10,14 +10,28 @@
 
 int main(int argc,char **argv){
     char * motif ;
+    char * liste_options = NULL ;
     int indice_arg = 1 ;
-    usage(argc, argv) ;
-    traitement_option(argc , argv, &indice_arg) ;
-    motif = *( argv + indice_arg) ;
-    printf("le motif est --%s--\n", motif) ;
-    indice_arg += 1 ;
-    recherche_fichiers(argc , argv, motif, indice_arg );
 
+    liste_options = (char *) malloc( 12 * sizeof(char) ) ;
+    if (liste_options == NULL){
+        printf("Erreur dans l'allocation de la memoire \n") ;
+        exit(EXIT_FAILURE) ;
+    }
+
+    usage(argc, argv) ;
+    traitement_option(argc , argv, &indice_arg, liste_options) ;    
+    motif = *( argv + indice_arg) ;
+    printf("Le motif est %s \n",motif) ;
+
+    printf("la liste d'options est : %s \n",liste_options) ;
+
+    if ( existe_option(liste_options,'c') || existe_option(liste_options,'L') || existe_option(liste_options,'l') || existe_option(liste_options,'v') ){
+        if ( existe_option(liste_options,'c') ){
+            recherche_fichiers_option_c(argc, argv, indice_arg, liste_options) ;
+        }
+    }
+    free(liste_options) ;
     exit(EXIT_SUCCESS) ; 
 }
 

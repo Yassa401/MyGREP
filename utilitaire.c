@@ -15,7 +15,7 @@ void usage(int argc, char **argv){
         exit(EXIT_FAILURE) ;
     }
     return ;
-}
+} 
 
 void print_help(){
     printf("Usage : ./mygrep [option(s)] <motif(s)> <fichier(s)> \n");
@@ -25,26 +25,58 @@ void print_help(){
     return ;
 }
 
-void traitement_option(int argc ,char **argv, int * indice_arg){
-    char *opstring = ":Hch" ; 
-    int val ;
+void traitement_option(int argc ,char **argv, int * indice_arg, char * liste_options){
+    char *opstring = ":Hvch" ; 
+    int val , continuer = 0 ;
     val = getopt(argc, argv, opstring) ;
-    while( val != EOF){
+    while( val != EOF && ! continuer ){
         switch (val){
+    
             case 'H' :
-                print_help() ;
+                * liste_options = 'H' ;
+                liste_options ++ ;
                 *indice_arg += 1 ;
+                /*si l'option H est mentionne on traite plus les autres options
+                et on affiche le menu d'aide */
+                continuer = 1 ;
+                break ;
+            case 'l' :
+                break ;
+            case 'L' :
+                break ;
+            case 'v' :
+                * liste_options = 'v' ;
+                liste_options ++ ;
+                * indice_arg += 1 ;
                 break ;
             case 'c' :
-                printf("option -c pris en charge \n") ;
-                *indice_arg += 1 ;
-                recherche_fichiers_option_c(argc ,argv, *indice_arg) ;
+                * liste_options = 'c' ;
+                liste_options ++ ;
+                * indice_arg += 1 ;
                 break ;
             case 'h' :
-                printf("option -h pris en charge \n");
-                *indice_arg += 1 ;
+                * liste_options = 'h' ;
+                liste_options ++ ;
+                * indice_arg += 1 ;
+                break ;
+            case 'n' :
+                break ;
+            case 'A' :
+                break ;
+            case 'B' :
                 break ;
         }
         val = getopt(argc, argv, opstring) ;
     }
+
+    *liste_options = '\0' ; 
+}
+
+int existe_option(char * liste_options, char option){
+    while( *liste_options != '\0'){
+        if (*liste_options == option)
+            return 1 ;
+        liste_options ++ ;
+    }
+    return 0 ;
 }
