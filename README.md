@@ -7,7 +7,9 @@ commande : make
 ## Version Actuelle :
 Version 1:
 
-le programme est capable de chercher un motif dans un ou plusieurs fichiers sans options
+le programme est capable de chercher un motif dans un ou plusieurs fichiers 
+
+options pris en charge : -H -v -l -L -c
 
 le programme reconnaît les deux caractères ^ et $ dans un motif
 
