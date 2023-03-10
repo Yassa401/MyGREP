@@ -132,7 +132,6 @@ void recherche_fichiers_option_c(int argc , char **argv, int indice_arg, char * 
             /* Le nom du fichier se trouve dans argv[i] */
             printf("\033[35;01m%s\033[34m:\033[00m%d \n",*(argv + i), nb_lignes_totale - compte_ligne ) ;
         }
-
         else{
             if( recherche_fichier_sans_affiche(fichier , motif, &compte_ligne, &nb_lignes_totale ) ){
                 /* Le nom du fichier se trouve dans argv[i] */
@@ -144,3 +143,69 @@ void recherche_fichiers_option_c(int argc , char **argv, int indice_arg, char * 
     }
     return ;
 }
+
+void recherche_fichiers_option_L(int argc, char ** argv, int indice_arg, char * liste_options){
+    int i , compte_ligne , nb_lignes_totale ;
+    FILE * fichier = NULL ;
+    char * motif = *(argv + indice_arg) ;
+    indice_arg += 1 ;
+    compte_ligne = 0 ;
+    for (i = indice_arg ; i < argc ; i++){
+        fichier = fopen(*(argv + i) ,"r") ;
+        if (fichier == NULL){
+            printf("Impossible de lire le fichier %s ! \n",*(argv + i)) ;
+            exit(EXIT_FAILURE) ;
+        }
+        /*si fichier ouvert, on cherche le motif la dedans en faisant 
+        appel a la fonction precedente */
+        if (existe_option(liste_options, 'v') ){
+            if (recherche_fichier_sans_affiche(fichier , motif, &compte_ligne, &nb_lignes_totale )){
+            /* Le nom du fichier se trouve dans argv[i] */
+            printf("\033[35;01m%s\033[34m\n",*(argv + i) ) ;
+            }
+        }
+        else{
+            if( ! recherche_fichier_sans_affiche(fichier , motif, &compte_ligne, &nb_lignes_totale )){
+                /* Le nom du fichier se trouve dans argv[i] */
+                printf("\033[35;01m%s\033[34m\n",*(argv + i) ) ;
+            }
+        }
+
+        fclose(fichier) ;
+    }
+    return ;
+}
+
+void recherche_fichiers_option_l(int argc, char ** argv, int indice_arg, char * liste_options){
+    int i , compte_ligne , nb_lignes_totale ;
+    FILE * fichier = NULL ;
+    char * motif = *(argv + indice_arg) ;
+    indice_arg += 1 ;
+    compte_ligne = 0 ;
+    for (i = indice_arg ; i < argc ; i++){
+        fichier = fopen(*(argv + i) ,"r") ;
+        if (fichier == NULL){
+            printf("Impossible de lire le fichier %s ! \n",*(argv + i)) ;
+            exit(EXIT_FAILURE) ;
+        }
+        /*si fichier ouvert, on cherche le motif la dedans en faisant 
+        appel a la fonction precedente */
+        if (existe_option(liste_options, 'v') ){
+            if ( !recherche_fichier_sans_affiche(fichier , motif, &compte_ligne, &nb_lignes_totale )){
+            /* Le nom du fichier se trouve dans argv[i] */
+            printf("\033[35;01m%s\033[34m\n",*(argv + i) ) ;
+            }
+        }
+        else{
+            if(recherche_fichier_sans_affiche(fichier , motif, &compte_ligne, &nb_lignes_totale )){
+                /* Le nom du fichier se trouve dans argv[i] */
+                printf("\033[35;01m%s\033[34m\n",*(argv + i) ) ;
+            }
+        }
+
+        fclose(fichier) ;
+    }
+    return ;
+}
+
+

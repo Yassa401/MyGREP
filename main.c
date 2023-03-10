@@ -20,15 +20,23 @@ int main(int argc,char **argv){
     }
 
     usage(argc, argv) ;
-    traitement_option(argc , argv, &indice_arg, liste_options) ;    
+    indice_arg = traitement_option(argc , argv, liste_options) ;    
     motif = *( argv + indice_arg) ;
     printf("Le motif est %s \n",motif) ;
 
     printf("la liste d'options est : %s \n",liste_options) ;
 
     if ( existe_option(liste_options,'c') || existe_option(liste_options,'L') || existe_option(liste_options,'l') || existe_option(liste_options,'v') ){
-        if ( existe_option(liste_options,'c') ){
-            recherche_fichiers_option_c(argc, argv, indice_arg, liste_options) ;
+        if(existe_option(liste_options,'L'))
+                recherche_fichiers_option_L(argc, argv, indice_arg, liste_options) ;
+        
+        else {
+            if (existe_option(liste_options,'l'))
+                recherche_fichiers_option_l(argc, argv, indice_arg, liste_options) ;
+            else { 
+                if(existe_option(liste_options,'c'))
+                    recherche_fichiers_option_c(argc, argv, indice_arg, liste_options) ;
+            }
         }
     }
     free(liste_options) ;

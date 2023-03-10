@@ -25,8 +25,8 @@ void print_help(){
     return ;
 }
 
-void traitement_option(int argc ,char **argv, int * indice_arg, char * liste_options){
-    char *opstring = ":Hvch" ; 
+int traitement_option(int argc ,char **argv, char * liste_options){
+    char *opstring = ":HlLvch" ; 
     int val , continuer = 0 ;
     val = getopt(argc, argv, opstring) ;
     while( val != EOF && ! continuer ){
@@ -35,29 +35,29 @@ void traitement_option(int argc ,char **argv, int * indice_arg, char * liste_opt
             case 'H' :
                 * liste_options = 'H' ;
                 liste_options ++ ;
-                *indice_arg += 1 ;
                 /*si l'option H est mentionne on traite plus les autres options
                 et on affiche le menu d'aide */
                 continuer = 1 ;
                 break ;
             case 'l' :
+                * liste_options = 'l' ;
+                liste_options ++ ;
                 break ;
             case 'L' :
+                * liste_options = 'L' ;
+                liste_options ++ ;
                 break ;
             case 'v' :
                 * liste_options = 'v' ;
                 liste_options ++ ;
-                * indice_arg += 1 ;
                 break ;
             case 'c' :
                 * liste_options = 'c' ;
                 liste_options ++ ;
-                * indice_arg += 1 ;
                 break ;
             case 'h' :
                 * liste_options = 'h' ;
                 liste_options ++ ;
-                * indice_arg += 1 ;
                 break ;
             case 'n' :
                 break ;
@@ -70,6 +70,7 @@ void traitement_option(int argc ,char **argv, int * indice_arg, char * liste_opt
     }
 
     *liste_options = '\0' ; 
+    return optind ;
 }
 
 int existe_option(char * liste_options, char option){
