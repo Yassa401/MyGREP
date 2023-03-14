@@ -21,7 +21,11 @@ void print_help(){
     printf("Usage : ./mygrep [option(s)] <motif(s)> <fichier(s)> \n");
     printf("Cherche motif(s) dans <fichier(s)> \n");
     printf("Exemple : ./mygrep -c \'Blabla\' fichier1.txt fichier2.txt \n\n");
-    printf("Options disponibles et leurs utilisations : \n-H : Affiche le menu d\'aide de la commande mygrep \n-c : Affiche seulement le nombre de lignes contenant le motif dans fichier(s)\n-h : n\'affiche pas le nom du fichier devant la ligne contenant le motif \n\n" ) ;    
+    printf("Options disponibles et leurs utilisations : \n-H : Affiche le menu d\'aide de la commande mygrep \n" ) ;
+    printf("-c : Affiche seulement le nombre de lignes contenant le motif dans fichier(s) \n") ;
+    printf("-l : n\'affiche pas les lignes trouvées mais le nom des fichiers avec au moins une correspondance \n") ;
+    printf("-L : n\'affiche pas les lignes trouvées mais le nom des fichiers avec aucune correspondance \n") ;
+    printf("-v : inverse la mise en correspondance \n") ;
     return ;
 }
 
@@ -37,6 +41,7 @@ int traitement_option(int argc ,char **argv, char * liste_options){
                 liste_options ++ ;
                 /*si l'option H est mentionne on traite plus les autres options
                 et on affiche le menu d'aide */
+                print_help() ;
                 continuer = 1 ;
                 break ;
             case 'l' :

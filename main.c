@@ -21,11 +21,17 @@ int main(int argc,char **argv){
 
     usage(argc, argv) ;
     indice_arg = traitement_option(argc , argv, liste_options) ;    
+    /* printf("indice_arg = %d\n",indice_arg) ; */
     motif = *( argv + indice_arg) ;
-    printf("Le motif est %s \n",motif) ;
+    if (indice_arg == 1 ){
+        indice_arg += 1 ;
+    }
+    /*printf("Le motif est %s \n",motif) ; */
 
-    printf("la liste d'options est : %s \n",liste_options) ;
-
+    /*printf("la liste d'options est : %s \n",liste_options) ; */
+    if (existe_option(liste_options,'H')){
+        exit(EXIT_SUCCESS) ;
+    }
     if ( existe_option(liste_options,'c') || existe_option(liste_options,'L') || existe_option(liste_options,'l') || existe_option(liste_options,'v') ){
         if(existe_option(liste_options,'L'))
                 recherche_fichiers_option_L(argc, argv, indice_arg, liste_options) ;
@@ -38,6 +44,9 @@ int main(int argc,char **argv){
                     recherche_fichiers_option_c(argc, argv, indice_arg, liste_options) ;
             }
         }
+    }
+    else{
+        recherche_fichiers(argc, argv, motif , indice_arg) ;
     }
     free(liste_options) ;
     exit(EXIT_SUCCESS) ; 
