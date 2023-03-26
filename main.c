@@ -11,16 +11,11 @@
 int main(int argc,char **argv){
     char * motif ;
     char * liste_options = NULL ;
-    int indice_arg = 1 ;
+    int indice_arg ;
 
-    liste_options = (char *) malloc( 12 * sizeof(char) ) ;
-    if (liste_options == NULL){
-        printf("Erreur dans l'allocation de la memoire \n") ;
-        exit(EXIT_FAILURE) ;
-    }
-
+    
     usage(argc, argv) ;
-    indice_arg = traitement_option(argc , argv, liste_options) ;    
+    liste_options = traitement_option(argc , argv, &indice_arg) ;    
     /* printf("indice_arg = %d\n",indice_arg) ; */
     motif = *( argv + indice_arg) ;
     if (indice_arg == 1 ){
@@ -42,6 +37,10 @@ int main(int argc,char **argv){
             else { 
                 if(existe_option(liste_options,'c'))
                     recherche_fichiers_option_c(argc, argv, indice_arg, liste_options) ;
+                else{
+                    if(existe_option(liste_options, 'v'))
+                        recherche_fichiers_option_v(argc, argv, indice_arg) ;
+                }
             }
         }
     }

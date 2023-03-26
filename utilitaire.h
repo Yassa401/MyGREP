@@ -4,7 +4,7 @@
 
 void usage(int argc,char **argv) ;
 
-int traitement_option(int argc ,char **argv, char * liste_options) ;
+char * traitement_option(int argc ,char **argv, int * indice_arg) ;
 
 int existe_option(char * liste_options, char option) ;
 

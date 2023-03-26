@@ -29,40 +29,47 @@ void print_help(){
     return ;
 }
 
-int traitement_option(int argc ,char **argv, char * liste_options){
-    char *opstring = ":HlLvch" ; 
-    int val , continuer = 0 ;
+char * traitement_option(int argc ,char **argv, int * indice_arg){
+    char *opstring = ":HlLvch" ;
+    int val , continuer = 0 , i = 0 ;
+    char * liste_options ;
+    /* allocation de mémoire pour la chaine de caracteres qui contient toute les options*/
+    liste_options = (char *) malloc( 12 * sizeof(char) ) ;
+    if (liste_options == NULL){
+        printf("Erreur dans l'allocation de la memoire \n") ;
+        exit(EXIT_FAILURE) ;
+    }
     val = getopt(argc, argv, opstring) ;
     while( val != EOF && ! continuer ){
         switch (val){
     
             case 'H' :
-                * liste_options = 'H' ;
-                liste_options ++ ;
+                * (liste_options + i) = 'H' ;
+                i++ ;
                 /*si l'option H est mentionne on traite plus les autres options
                 et on affiche le menu d'aide */
                 print_help() ;
                 continuer = 1 ;
                 break ;
             case 'l' :
-                * liste_options = 'l' ;
-                liste_options ++ ;
+                * (liste_options + i) = 'l' ;
+                i++ ;
                 break ;
             case 'L' :
-                * liste_options = 'L' ;
-                liste_options ++ ;
+                * (liste_options + i) = 'L' ;
+                i++ ;
                 break ;
             case 'v' :
-                * liste_options = 'v' ;
-                liste_options ++ ;
+                * (liste_options + i) = 'v' ;
+                i++ ;
                 break ;
             case 'c' :
-                * liste_options = 'c' ;
-                liste_options ++ ;
+                * (liste_options + i)= 'c' ;
+                i++ ;
                 break ;
             case 'h' :
-                * liste_options = 'h' ;
-                liste_options ++ ;
+                * (liste_options + i) = 'h' ;
+                i++ ;
                 break ;
             case 'n' :
                 break ;
@@ -74,12 +81,13 @@ int traitement_option(int argc ,char **argv, char * liste_options){
         val = getopt(argc, argv, opstring) ;
     }
 
-    *liste_options = '\0' ; 
-    return optind ;
+    *(liste_options + i)= '\0' ;    
+    *indice_arg = optind ;
+    return liste_options ;
 }
 
 int existe_option(char * liste_options, char option){
-    while( *liste_options != '\0'){
+    while( * liste_options != '\0'){
         if (*liste_options == option)
             return 1 ;
         liste_options ++ ;
