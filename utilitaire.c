@@ -10,9 +10,31 @@ Date de création : 15/02/2023
 #include "recherche_sans_affiche.h"
 
 void usage(int argc, char **argv){
-    if (argc < 3){
+    char * opstring = ":H" ;
+    int val , existe_option_H ;
+    
+    /* on verifie si l'option H n'est pas mentionné 
+     * si vrai , pas besoin d'avoir les autres arguments et on affiche le menu d'aide
+     * sinon un message d'usage s'affiche 
+     */
+    existe_option_H = 0 ;
+    val = getopt(argc,argv,opstring) ;
+    while ( val != EOF && !existe_option_H){
+        switch (val){
+            case 'H' :
+                existe_option_H = 1 ;
+                break ;
+        }
+    }
+
+    if (argc < 3 && !existe_option_H){
         printf("Usage: %s <motif> <fichier1> [<fichier2> ...] \n",*(argv)) ;
-        exit(EXIT_FAILURE) ;
+        exit(EXIT_SUCCESS) ;
+    }
+    else {
+        if (argc < 3 && existe_option_H){
+            print_help() ;
+        }
     }
     return ;
 } 
@@ -21,11 +43,12 @@ void print_help(){
     printf("Usage : ./mygrep [option(s)] <motif(s)> <fichier(s)> \n");
     printf("Cherche motif(s) dans <fichier(s)> \n");
     printf("Exemple : ./mygrep -c \'Blabla\' fichier1.txt fichier2.txt \n\n");
-    printf("Options disponibles et leurs utilisations : \n-H : Affiche le menu d\'aide de la commande mygrep \n" ) ;
-    printf("-c : Affiche seulement le nombre de lignes contenant le motif dans fichier(s) \n") ;
-    printf("-l : n\'affiche pas les lignes trouvées mais le nom des fichiers avec au moins une correspondance \n") ;
-    printf("-L : n\'affiche pas les lignes trouvées mais le nom des fichiers avec aucune correspondance \n") ;
-    printf("-v : inverse la mise en correspondance \n") ;
+    printf("Options disponibles et leurs utilisations : \n\n-H  Affiche le menu d\'aide de la commande mygrep \n" ) ;
+    printf("-c  Affiche seulement le nombre de lignes contenant le motif dans fichier(s) \n") ;
+    printf("-l  n\'affiche pas les lignes trouvées mais le nom des fichiers avec au moins une correspondance \n") ;
+    printf("-L  n\'affiche pas les lignes trouvées mais le nom des fichiers avec aucune correspondance \n") ;
+    printf("-v  inverse la correspondance \n") ;
+    printf("\n");
     return ;
 }
 

@@ -5,7 +5,7 @@ Version personnel de la commande grep sur linux
 commande : make
 
 ## Version Actuelle :
-Version 1:
+Version 2:
 
 le programme est capable de chercher un motif dans un ou plusieurs fichiers 
 
@@ -15,4 +15,4 @@ le programme reconnaît les deux caractères ^ et $ dans un motif
 
 Pour tester:
 
-commande : ./mygrep 'motif' exemple.txt  exemple2.txt <!-- pour chercher le motif "yasser" dans le fichier "exemple.txt" et "exemple2.txt" !-->
+commande : ./mygrep 'motif' exemple.txt  exemple2.txt <!-- pour chercher le motif 'motif' dans le fichier "exemple.txt" et "exemple2.txt" !-->
