@@ -9,32 +9,10 @@ Date de création : 15/02/2023
 #include "utilitaire.h"
 #include "recherche_sans_affiche.h"
 
-void usage(int argc, char **argv){
-    char * opstring = ":H" ;
-    int val , existe_option_H ;
-    
-    /* on verifie si l'option H n'est pas mentionné 
-     * si vrai , pas besoin d'avoir les autres arguments et on affiche le menu d'aide
-     * sinon un message d'usage s'affiche 
-     */
-    existe_option_H = 0 ;
-    val = getopt(argc,argv,opstring) ;
-    while ( val != EOF && !existe_option_H){
-        switch (val){
-            case 'H' :
-                existe_option_H = 1 ;
-                break ;
-        }
-    }
-
-    if (argc < 3 && !existe_option_H){
+void usage(int argc, char **argv, char * liste_options){
+    if (argc < 3 && !existe_option(liste_options, 'H')){
         printf("Usage: %s <motif> <fichier1> [<fichier2> ...] \n",*(argv)) ;
         exit(EXIT_SUCCESS) ;
-    }
-    else {
-        if (argc < 3 && existe_option_H){
-            print_help() ;
-        }
     }
     return ;
 } 
@@ -65,7 +43,6 @@ char * traitement_option(int argc ,char **argv, int * indice_arg){
     val = getopt(argc, argv, opstring) ;
     while( val != EOF && ! continuer ){
         switch (val){
-    
             case 'H' :
                 * (liste_options + i) = 'H' ;
                 i++ ;

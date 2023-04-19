@@ -13,9 +13,8 @@ int main(int argc,char **argv){
     char * liste_options = NULL ;
     int indice_arg ;
 
-    
-    usage(argc, argv) ;
     liste_options = traitement_option(argc , argv, &indice_arg) ;    
+    usage(argc, argv, liste_options) ;
     /* printf("indice_arg = %d\n",indice_arg) ; */
     motif = *( argv + indice_arg) ;
     if (indice_arg == 1 ){
@@ -25,12 +24,13 @@ int main(int argc,char **argv){
 
     /*printf("la liste d'options est : %s \n",liste_options) ; */
     if (existe_option(liste_options,'H')){
+        free(liste_options) ;
         exit(EXIT_SUCCESS) ;
     }
     if ( existe_option(liste_options,'c') || existe_option(liste_options,'L') || existe_option(liste_options,'l') || existe_option(liste_options,'v') ){
         if(existe_option(liste_options,'L'))
                 recherche_fichiers_option_L(argc, argv, indice_arg, liste_options) ;
-        
+
         else {
             if (existe_option(liste_options,'l'))
                 recherche_fichiers_option_l(argc, argv, indice_arg, liste_options) ;

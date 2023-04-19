@@ -2,7 +2,7 @@
 #ifndef UTILITAIRE_H
 #define UTILITAIRE_H
 
-void usage(int argc,char **argv) ;
+void usage(int argc,char **argv, char * liste_options) ;
 
 void print_help() ;
 
