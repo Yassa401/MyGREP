@@ -8,7 +8,7 @@ mygrep : main.o recherche.o recherche_sans_affiche.o utilitaire.o
 	$(CC) $^ -o $@
 main.o : main.c recherche.h utilitaire.h
 	$(CC) -c $(CFLAGS) $<
-recherche.o : recherche.c recherche.h
+recherche.o : recherche.c recherche.h utilitaire.h
 	$(CC) -c $(CFLAGS) $<
 recherche_sans_affiche.o : recherche_sans_affiche.c recherche_sans_affiche.h recherche.h
 	$(CC) -c $(CFLAGS) $<

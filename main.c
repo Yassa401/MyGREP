@@ -23,25 +23,31 @@ int main(int argc,char **argv){
     /*printf("Le motif est %s \n",motif) ; */
 
     /*printf("la liste d'options est : %s \n",liste_options) ; */
-    if (existe_option(liste_options,'H')){
-        free(liste_options) ;
-        exit(EXIT_SUCCESS) ;
-    }
-    if ( existe_option(liste_options,'c') || existe_option(liste_options,'L') || existe_option(liste_options,'l') || existe_option(liste_options,'v') ){
-        if(existe_option(liste_options,'L'))
-                recherche_fichiers_option_L(argc, argv, indice_arg, liste_options) ;
+    if ( *(liste_options) != 0 ){
+        
+        if (existe_option(liste_options,'H')){
+            free(liste_options) ;
+            exit(EXIT_SUCCESS) ;
+        }
+        if ( existe_option(liste_options,'c') || existe_option(liste_options,'L') || existe_option(liste_options,'l') || existe_option(liste_options,'v') ){
+            if(existe_option(liste_options,'L'))
+                    recherche_fichiers_option_L(argc, argv, indice_arg, liste_options) ;
 
-        else {
-            if (existe_option(liste_options,'l'))
-                recherche_fichiers_option_l(argc, argv, indice_arg, liste_options) ;
-            else { 
-                if(existe_option(liste_options,'c'))
-                    recherche_fichiers_option_c(argc, argv, indice_arg, liste_options) ;
-                else{
-                    if(existe_option(liste_options, 'v'))
-                        recherche_fichiers_option_v(argc, argv, indice_arg) ;
+            else {
+                if (existe_option(liste_options,'l'))
+                    recherche_fichiers_option_l(argc, argv, indice_arg, liste_options) ;
+                else { 
+                    if(existe_option(liste_options,'c'))
+                        recherche_fichiers_option_c(argc, argv, indice_arg, liste_options) ;
+                    else{
+                        if(existe_option(liste_options, 'v'))
+                            recherche_fichiers_option_v(argc, argv, indice_arg) ;
+                    }
                 }
             }
+        }
+        else{
+            recherche_fichiers_option_affichage(argc, argv, liste_options, indice_arg) ;
         }
     }
     else{
