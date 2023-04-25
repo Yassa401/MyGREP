@@ -31,7 +31,7 @@ void print_help(){
 }
 
 char * traitement_option(int argc ,char **argv, int * indice_arg){
-    char *opstring = ":HlLvchn" ;
+    char *opstring = ":HlLvchni" ;
     int val , continuer = 0 , i = 0 ;
     char * liste_options ;
     /* allocation de mémoire pour la chaine de caracteres qui contient toute les options*/
@@ -73,6 +73,10 @@ char * traitement_option(int argc ,char **argv, int * indice_arg){
                 break ;
             case 'n' :
                 * (liste_options + i) = 'n' ;
+                i++ ;
+                break ;
+            case 'i' :
+                * (liste_options + i) = 'i' ;
                 i++ ;
                 break ;
             case 'A' :

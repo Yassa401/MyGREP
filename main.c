@@ -15,30 +15,27 @@ int main(int argc,char **argv){
 
     liste_options = traitement_option(argc , argv, &indice_arg) ;    
     usage(argc, argv, liste_options) ;
-    /* printf("indice_arg = %d\n",indice_arg) ; */
+    /*printf("indice_arg = %d\n",indice_arg) ; */ 
     motif = *( argv + indice_arg) ;
-    if (indice_arg == 1 ){
-        indice_arg += 1 ;
-    }
-    /*printf("Le motif est %s \n",motif) ; */
+    indice_arg += 1 ;
+    /*printf("Le motif est %s \n",motif) ;*/
 
     /*printf("la liste d'options est : %s \n",liste_options) ; */
     if ( *(liste_options) != 0 ){
-        
         if (existe_option(liste_options,'H')){
             free(liste_options) ;
             exit(EXIT_SUCCESS) ;
         }
         if ( existe_option(liste_options,'c') || existe_option(liste_options,'L') || existe_option(liste_options,'l') || existe_option(liste_options,'v') ){
             if(existe_option(liste_options,'L'))
-                    recherche_fichiers_option_L(argc, argv, indice_arg, liste_options) ;
+                    recherche_fichiers_option_L(argc, argv, motif, indice_arg, liste_options) ;
 
             else {
                 if (existe_option(liste_options,'l'))
-                    recherche_fichiers_option_l(argc, argv, indice_arg, liste_options) ;
+                    recherche_fichiers_option_l(argc, argv, motif, indice_arg, liste_options) ;
                 else { 
                     if(existe_option(liste_options,'c'))
-                        recherche_fichiers_option_c(argc, argv, indice_arg, liste_options) ;
+                        recherche_fichiers_option_c(argc, argv, motif, indice_arg, liste_options) ;
                     else{
                         if(existe_option(liste_options, 'v'))
                             recherche_fichiers_option_v(argc, argv, indice_arg) ;
@@ -47,11 +44,11 @@ int main(int argc,char **argv){
             }
         }
         else{
-            recherche_fichiers_option_affichage(argc, argv, liste_options, indice_arg) ;
+            recherche_fichiers(argc, argv, motif , indice_arg, liste_options) ;            
         }
     }
     else{
-        recherche_fichiers(argc, argv, motif , indice_arg) ;
+        recherche_fichiers(argc, argv, motif , indice_arg, liste_options) ;
     }
     free(liste_options) ;
     exit(EXIT_SUCCESS) ; 
