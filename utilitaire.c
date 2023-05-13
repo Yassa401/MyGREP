@@ -30,8 +30,9 @@ void print_help(){
     return ;
 }
 
-char * traitement_option(int argc ,char **argv, int * indice_arg){
-    char *opstring = ":HlLvchni" ;
+char * traitement_option(int argc ,char **argv, char *** motif, int * nb_motif ,int * indice_arg){
+    char *opstring = ":HlLvchnie:" ;
+    char ** motifs = NULL ;
     int val , continuer = 0 , i = 0 ;
     char * liste_options ;
     /* allocation de mémoire pour la chaine de caracteres qui contient toute les options*/
@@ -79,14 +80,44 @@ char * traitement_option(int argc ,char **argv, int * indice_arg){
                 * (liste_options + i) = 'i' ;
                 i++ ;
                 break ;
+            case 'e' :
+                * (liste_options + i) = 'e' ;
+                if (optarg != NULL){
+                    if (motifs == NULL){
+                        motifs = (char **) malloc( sizeof(char *) ) ;
+                        if (motifs == NULL){
+                            fprintf(stderr,"erreur dans l'allocation mémoire \n") ;
+                            exit(1) ;
+                        }
+                        *nb_motif += 1 ;
+                    }
+                    else{
+                        *nb_motif += 1 ;
+                        motifs = (char **) realloc( motifs , *nb_motif * sizeof(char *) ) ;
+                        if (motifs == NULL){
+                            fprintf(stderr,"erreur dans l'allocation mémoire \n") ;
+                            exit(1) ;
+                        }
+                    }
+                    /* fprintf(stderr,"optarg %s \n",optarg) ; */
+                    motifs[*nb_motif-1] = optarg ; 
+                }           
+                    
+                i++ ;
             case 'A' :
                 break ;
             case 'B' :
                 break ;
+            case ':' :
+                /*si un argument nécessaire à une option manque , quitte le programme */
+                fprintf(stderr,"argument manquant pour l'option %c \n", optopt) ;
+                free(liste_options) ;
+                exit(EXIT_FAILURE) ;
         }
         val = getopt(argc, argv, opstring) ;
     }
 
+    *motif = motifs ;
     *(liste_options + i)= '\0' ;    
     *indice_arg = optind ;
     return liste_options ;

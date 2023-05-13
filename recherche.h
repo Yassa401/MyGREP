@@ -10,9 +10,9 @@ int chercher_motif_fin(char * motif , char * ligne, int existe_option_i) ;
 
 int chercher_motif_debut_fin(char * motif, char * ligne, int existe_option_i) ;
 
-void recherche_fichier(char * nom_fichier , FILE * fichier, char * motif, char * liste_options) ;
+void recherche_fichier(char * nom_fichier , FILE * fichier, char ** motifs, int nb_motifs, char * liste_options) ;
 
-void recherche_fichiers(int argc ,char **argv, char * motif, int indice_arg, char * liste_options) ;
+void recherche_fichiers(int argc ,char **argv, char ** motifs, int nb_motifs, int indice_arg, char * liste_options) ;
 
 void recherche_fichier_option_v(char * nom_fichier ,FILE * fichier, char * motif) ;
 

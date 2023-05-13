@@ -15,11 +15,12 @@ Date de création : 26/02/2023
  * renvoie 1 si au moins une ligne trouvees
  * sinon renvoie 0
  */
-int recherche_fichier_sans_affiche(FILE * fichier, char * motif, int * compte_ligne, int * nb_lignes_totale, int existe_option_i){
+int recherche_fichier_sans_affiche(FILE * fichier, char ** motifs, int nb_motifs, int * compte_ligne, int * nb_lignes_totale, int existe_option_i){
     int i = 0 , nb_totale = 0 ;
+    int indice_motif = 0 ;
     char car ;
     char * ligne = (char *) calloc( NB_CHAR,sizeof(char) ) ;
-
+    char * motif ;
     /* On remet le compteur de lignes trouvées à 0 après chaque appel de la fonction
      * Ce compteur peut etre renvoye en cas d'appel à l'option -c 
     */
@@ -29,71 +30,91 @@ int recherche_fichier_sans_affiche(FILE * fichier, char * motif, int * compte_li
     car = fgetc(fichier) ;
     while( car != EOF){
         if (car == '\n'){
-            /* si plusieurs saut de lignes on les ignorent */
-            while (car == '\n'){
-                car =fgetc(fichier) ;
-            }
             *(ligne + i ) = '\0' ;
-            nb_totale ++ ;
+            indice_motif = 0 ;
+            nb_totale += 1 ;
+            car = fgetc(fichier) ;
             i = 0 ;
             /* si ligne construit , on recherche le motif la dedans on faisant appel 
             a une des fonctions de recherche de motif dans une ligne 
             */
             /* si le motif commence par "^" on cherche le motif au debut de la ligne*/
-            if ( *(motif) == '^' && *(motif + strlen(motif) - 1) == '$' ){
-                if ( chercher_motif_debut_fin(motif, ligne, existe_option_i) ){
-                    *compte_ligne += 1 ;    
+            while(indice_motif < nb_motifs){
+                motif = *(motifs + indice_motif) ;
+                if ( *(motif) == '^' && *(motif + strlen(motif) - 1) == '$' ){
+                    if ( chercher_motif_debut_fin(motif, ligne, existe_option_i) ){
+                        *compte_ligne += 1 ;
+                        break ;  
+                    }
                 }
+                else{
+                    if ( *(motif) == '^'){
+                        if ( chercher_motif_debut(motif, ligne, existe_option_i) ){
+                            *compte_ligne += 1 ; 
+                            break ;   
+                        }
+                    }
+                    if ( *(motif + strlen(motif) - 1) == '$'){
+                        if ( chercher_motif_fin(motif, ligne, existe_option_i) ){
+                            *compte_ligne += 1 ;
+                            break ;
+                        }
+                    }
+                    else {
+                        if ( chercher_motif(motif, ligne, existe_option_i) ){
+                            *compte_ligne += 1 ;
+                            break ;
+                        }
+                    }
+                }
+                indice_motif += 1 ;
             }
-            else{
-                if ( *(motif) == '^'){
-                    if ( chercher_motif_debut(motif, ligne, existe_option_i) ){
-                        *compte_ligne += 1 ;    
-                    }
-                }
-                if ( *(motif + strlen(motif) - 1) == '$'){
-                    if ( chercher_motif_fin(motif, ligne, existe_option_i) ){
-                        *compte_ligne += 1 ;
-                    }
-                }
-                else {
-                    if ( chercher_motif(motif, ligne, existe_option_i) ){
-                        *compte_ligne += 1 ;
-                    }
-                }
-            } 
+        }
+        /* si plusieurs saut de lignes on les ignorent */
+        while (car == '\n'){
+            car = fgetc(fichier) ;
+            nb_totale += 1 ;
         }
         *(ligne + i) = car ;
         i++;
         car = fgetc(fichier) ;
         if ( car == EOF ){
             *(ligne + i ) = '\0' ;
-            nb_totale ++ ;
+            indice_motif = 0 ;
             /* si ligne construit , on recherche le motif la dedans on faisant appel 
             a une des fonctions de recherche de motif dans une ligne 
             */
             /* si le motif commence par "^" on cherche le motif au debut de la ligne*/
-            if ( *(motif) == '^' && *(motif + strlen(motif) - 1) == '$' ){
-                if ( chercher_motif_debut_fin(motif, ligne, existe_option_i) ){
-                    *compte_ligne += 1 ;    
-                }
-            }
-            else{
-                if ( *(motif) == '^'){
-                    if ( chercher_motif_debut(motif, ligne, existe_option_i) ){
-                        *compte_ligne += 1 ;    
-                    }
-                }
-                if ( *(motif + strlen(motif) - 1) == '$'){
-                    if ( chercher_motif_fin(motif, ligne, existe_option_i) ){
+
+            while(indice_motif < nb_motifs){
+                motif = *(motifs + indice_motif) ;
+                if ( *(motif) == '^' && *(motif + strlen(motif) - 1) == '$' ){
+                    if ( chercher_motif_debut_fin(motif, ligne, existe_option_i) ){
                         *compte_ligne += 1 ;
+                        break ; 
                     }
                 }
-                else {
-                    if ( chercher_motif(motif, ligne, existe_option_i) ){
-                        *compte_ligne += 1 ;    
+                else{
+                    if ( *(motif) == '^'){
+                        if ( chercher_motif_debut(motif, ligne, existe_option_i) ){
+                            *compte_ligne += 1 ;
+                            break ;    
+                        }
+                    }
+                    if ( *(motif + strlen(motif) - 1) == '$'){
+                        if ( chercher_motif_fin(motif, ligne, existe_option_i) ){
+                            *compte_ligne += 1 ;
+                            break ;
+                        }
+                    }
+                    else {
+                        if ( chercher_motif(motif, ligne, existe_option_i) ){
+                            *compte_ligne += 1 ;
+                            break ;    
+                        }
                     }
                 }
+                indice_motif += 1 ;
             }
         }
     }
@@ -112,7 +133,7 @@ int recherche_fichier_sans_affiche(FILE * fichier, char * motif, int * compte_li
  * et cherche le motif dans chacun des fichiers
  * ne renvoie rien
  */
-void recherche_fichiers_option_c(int argc , char **argv, char * motif, int indice_arg, char * liste_options){
+void recherche_fichiers_option_c(int argc , char **argv, char ** motifs, int nb_motifs, int indice_arg, char * liste_options){
     int i , compte_ligne , nb_lignes_totale ;
     int existe_option_i = 0 ;
     FILE * fichier = NULL ;
@@ -129,12 +150,12 @@ void recherche_fichiers_option_c(int argc , char **argv, char * motif, int indic
         /*si fichier ouvert, on cherche le motif la dedans en faisant 
         appel a la fonction precedente */
         if (existe_option(liste_options, 'v') ){
-            recherche_fichier_sans_affiche(fichier , motif, &compte_ligne, &nb_lignes_totale , existe_option_i) ;
+            recherche_fichier_sans_affiche(fichier , motifs, nb_motifs, &compte_ligne, &nb_lignes_totale , existe_option_i) ;
             /* Le nom du fichier se trouve dans argv[i] */
             printf("\033[35;01m%s\033[34m:\033[00m%d \n",*(argv + i), nb_lignes_totale - compte_ligne ) ;
         }
         else{
-            if( recherche_fichier_sans_affiche(fichier , motif, &compte_ligne, &nb_lignes_totale, existe_option_i ) ){
+            if( recherche_fichier_sans_affiche(fichier , motifs, nb_motifs, &compte_ligne, &nb_lignes_totale, existe_option_i ) ){
                 /* Le nom du fichier se trouve dans argv[i] */
                 printf("\033[35;01m%s\033[34m:\033[00m%d \n",*(argv + i), compte_ligne ) ;
             }
@@ -145,7 +166,7 @@ void recherche_fichiers_option_c(int argc , char **argv, char * motif, int indic
     return ;
 }
 
-void recherche_fichiers_option_L(int argc, char ** argv, char * motif, int indice_arg, char * liste_options){
+void recherche_fichiers_option_L(int argc, char ** argv, char ** motifs, int nb_motifs, int indice_arg, char * liste_options){
     int i , compte_ligne , nb_lignes_totale ;
     int existe_option_i = 0 ;
     FILE * fichier = NULL ;
@@ -160,13 +181,13 @@ void recherche_fichiers_option_L(int argc, char ** argv, char * motif, int indic
         /*si fichier ouvert, on cherche le motif la dedans en faisant 
         appel a la fonction precedente */
         if (existe_option(liste_options, 'v') ){
-            if (recherche_fichier_sans_affiche(fichier , motif, &compte_ligne, &nb_lignes_totale, existe_option_i)){
+            if (recherche_fichier_sans_affiche(fichier , motifs, nb_motifs, &compte_ligne, &nb_lignes_totale, existe_option_i)){
             /* Le nom du fichier se trouve dans argv[i] */
             printf("\033[35;01m%s\033[34m\n",*(argv + i) ) ;
             }
         }
         else{
-            if( ! recherche_fichier_sans_affiche(fichier , motif, &compte_ligne, &nb_lignes_totale, existe_option_i)){
+            if( ! recherche_fichier_sans_affiche(fichier , motifs, nb_motifs, &compte_ligne, &nb_lignes_totale, existe_option_i)){
                 /* Le nom du fichier se trouve dans argv[i] */
                 printf("\033[35;01m%s\033[34m\n",*(argv + i) ) ;
             }
@@ -177,7 +198,7 @@ void recherche_fichiers_option_L(int argc, char ** argv, char * motif, int indic
     return ;
 }
 
-void recherche_fichiers_option_l(int argc, char ** argv, char * motif,  int indice_arg, char * liste_options){
+void recherche_fichiers_option_l(int argc, char ** argv, char ** motifs, int nb_motifs,  int indice_arg, char * liste_options){
     int i , compte_ligne , nb_lignes_totale ;
     int existe_option_i = 0 ;
     FILE * fichier = NULL ;
@@ -192,13 +213,13 @@ void recherche_fichiers_option_l(int argc, char ** argv, char * motif,  int indi
         /*si fichier ouvert, on cherche le motif la dedans en faisant 
         appel a la fonction precedente */
         if (existe_option(liste_options, 'v') ){
-            if ( !recherche_fichier_sans_affiche(fichier , motif, &compte_ligne, &nb_lignes_totale, existe_option_i )){
+            if ( !recherche_fichier_sans_affiche(fichier , motifs, nb_motifs, &compte_ligne, &nb_lignes_totale, existe_option_i )){
             /* Le nom du fichier se trouve dans argv[i] */
             printf("\033[35;01m%s\033[34m\n",*(argv + i) ) ;
             }
         }
         else{
-            if(recherche_fichier_sans_affiche(fichier , motif, &compte_ligne, &nb_lignes_totale, existe_option_i )){
+            if(recherche_fichier_sans_affiche(fichier , motifs, nb_motifs, &compte_ligne, &nb_lignes_totale, existe_option_i )){
                 /* Le nom du fichier se trouve dans argv[i] */
                 printf("\033[35;01m%s\033[34m\n",*(argv + i) ) ;
             }
