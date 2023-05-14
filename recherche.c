@@ -24,7 +24,7 @@ int chercher_motif(char * motif, char * ligne, int existe_option_i){
                 /*on parcours la suite de caracteres du motif à la suite de caractères de la ligne*/
                 for (j = 1 ; j < (int) strlen(motif) ; j++){
                     /*si un caractere de la suite ne correspond à un autre on arrete et revient à la 1ere condition */
-                    if ( *(motif + j) != *(ligne + i + j) && (*(motif + j) + 'A' -'a') != *(ligne +i +j) && (*(motif) + 'a' - 'A') != *(ligne +i +j) )
+                    if ( *(motif + j) != *(ligne + i + j) && (*(motif + j) + 'A' -'a') != *(ligne +i +j) && (*(motif+j) + 'a' - 'A') != *(ligne +i +j))
                         break ;
                 }
                 /*apres le parcours de toute la chaine du motif sans interruption signifie que les suites se ressemblaient 
@@ -52,7 +52,6 @@ int chercher_motif(char * motif, char * ligne, int existe_option_i){
                     return 1 ;
             }                    
         }
-        return 0 ;
     }
     return 0 ;
 }
@@ -64,14 +63,18 @@ int chercher_motif(char * motif, char * ligne, int existe_option_i){
 int chercher_motif_debut(char * motif, char * ligne, int existe_option_i){
     int i ;
     if (existe_option_i){
-
-    }
-    for (i = 1 ; i < (int) strlen(motif) ; i++){
-        if ( *(motif + i) != *(ligne + i - 1) ){
+        for (i = 1 ; i < (int) strlen(motif) ; i++){
+        if ( *(motif + i) != *(ligne + i - 1) && (*(motif + i) + 'a' - 'A') != *(ligne + i - 1) && (*(motif + i) + 'A' - 'a') != *(ligne + i - 1))
             return 0 ;
         }
     }
-    return 1;
+    else{
+        for (i = 1 ; i < (int) strlen(motif) ; i++){
+            if ( *(motif + i) != *(ligne + i - 1) )
+                return 0 ;
+        }
+    }
+    return 1 ;
 }
 
 /*! Fonction qui cherche le motif a la fin de ligne
@@ -105,7 +108,7 @@ int chercher_motif_debut_fin(char * motif, char * ligne, int existe_option_i){
         if ( *(motif + i) == *(ligne + i - 1)){
             for ( i = 2 ; i < (int) (strlen(motif) - 1) ; i++ ){
             /*On arrete si deux caracteres au meme indice sont differents*/
-            if ( *(motif + i) != *(ligne + i - 1) && (*(motif + i) + 'a' + 'A') != *(ligne + i - 1) && (*(motif + i) + 'a' + 'A') != *(ligne + i - 1))
+            if ( *(motif + i) != *(ligne + i - 1) && (*(motif + i) + 'a' - 'A') != *(ligne + i - 1) && (*(motif + i) + 'A' - 'a') != *(ligne + i - 1))
                 return 0 ;
             }
             /*On verifie bien que le motif sans "^" et "$" a la meme longueur que la ligne*/
