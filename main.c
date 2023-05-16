@@ -13,8 +13,18 @@ int main(int argc,char **argv){
     int nb_motifs = 0 ;
     char * liste_options = NULL ;
     int indice_arg ;
+    option_A_B * option_a_b = NULL ;
+    option_a_b = (option_A_B *) malloc (sizeof(option_A_B)) ;
+    if (option_a_b == NULL){
+        fprintf(stderr,"erreur dans l'allocation mémoire \n") ;
+        exit(1) ;
+    }
+    option_a_b->existe_option_A = 0 ;
+    option_a_b->existe_option_B = 0 ;
+    option_a_b->n_A = 0 ;
+    option_a_b->n_B = 0 ;
 
-    liste_options = traitement_option(argc , argv, &motifs , &nb_motifs ,  &indice_arg) ;    
+    liste_options = traitement_option(argc , argv, &motifs , &nb_motifs ,  &indice_arg, option_a_b) ;    
     usage(argc, argv, liste_options) ;
     /*printf("indice_arg = %d\n",indice_arg) ; */ 
     /* ajoute le motif par défaut sans l'option -e qui se trouve à l'indice optind */
@@ -30,12 +40,12 @@ int main(int argc,char **argv){
         fprintf(stderr,"motif %d : %s ", i, motifs[i]) ;
     }
     fprintf(stderr,"\n") ;
+    fprintf(stderr,"la liste d'options est : %s \n",liste_options) ;
+    fprintf(stderr," %d -> %d et %d -> %d \n", option_a_b->existe_option_A, option_a_b->n_A, option_a_b->existe_option_B, option_a_b->n_B) ;
     */
     indice_arg += 1 ;
-    /*printf("Le motif est %s \n",motif) ;*/
 
-    /*printf("la liste d'options est : %s \n",liste_options) ; */
-    
+
     if ( *(liste_options) != 0 ){
         if (existe_option(liste_options,'H')){
             free(liste_options) ;
@@ -57,16 +67,14 @@ int main(int argc,char **argv){
                     }
                 }
             }
-        }
-        else{
-            recherche_fichiers(argc, argv, motifs, nb_motifs, indice_arg, liste_options) ;            
-        }
+        }           
     }
     else{
-        recherche_fichiers(argc, argv, motifs, nb_motifs, indice_arg, liste_options) ;
+        recherche_fichiers(argc, argv, motifs, nb_motifs, indice_arg, liste_options, option_a_b) ;
     }
-    /*recherche_fichiers(argc, argv, motifs, nb_motifs, indice_arg, liste_options) ; */
+    recherche_fichiers(argc, argv, motifs, nb_motifs, indice_arg, liste_options, option_a_b) ;
 
+    free(option_a_b) ;
     free(liste_options) ;
     free(motifs) ;
     exit(EXIT_SUCCESS) ; 

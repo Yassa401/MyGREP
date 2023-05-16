@@ -30,8 +30,8 @@ void print_help(){
     return ;
 }
 
-char * traitement_option(int argc ,char **argv, char *** motif, int * nb_motif ,int * indice_arg){
-    char *opstring = ":HlLvchnie:" ;
+char * traitement_option(int argc ,char **argv, char *** motif, int * nb_motif ,int * indice_arg, option_A_B * option_a_b){
+    char *opstring = ":HlLvchnie:A:B:" ;
     char ** motifs = NULL ;
     int val , continuer = 0 , i = 0 ;
     char * liste_options ;
@@ -101,16 +101,37 @@ char * traitement_option(int argc ,char **argv, char *** motif, int * nb_motif ,
                     }
                     /* fprintf(stderr,"optarg %s \n",optarg) ; */
                     motifs[*nb_motif-1] = optarg ; 
-                }           
-                    
+                }               
                 i++ ;
+                break ;
             case 'A' :
+                option_a_b->existe_option_A = 1 ;
+                if (optarg != NULL){
+                    option_a_b->n_A = atoi(optarg) ;
+                    if (option_a_b->n_A == 0){
+                        fprintf(stderr,"Entrez une valeur positive pour l'argument -A \n") ;
+                        free(option_a_b) ;
+                        free(liste_options) ;
+                        exit(EXIT_FAILURE) ;
+                    }
+                }
                 break ;
             case 'B' :
+                option_a_b->existe_option_B = 1 ;
+                if (optarg != NULL){
+                    option_a_b->n_B = atoi(optarg) ;
+                    if (option_a_b->n_B == 0){
+                        fprintf(stderr,"Entrez une valeur positive pour l'argument -B \n") ;
+                        free(option_a_b) ;
+                        free(liste_options) ;
+                        exit(EXIT_FAILURE) ;
+                    }
+                }
                 break ;
             case ':' :
                 /*si un argument nécessaire à une option manque , quitte le programme */
                 fprintf(stderr,"argument manquant pour l'option %c \n", optopt) ;
+                free(option_a_b) ;
                 free(liste_options) ;
                 exit(EXIT_FAILURE) ;
         }
