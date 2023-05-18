@@ -18,14 +18,22 @@ void usage(int argc, char **argv, char * liste_options){
 } 
 
 void print_help(){
-    printf("Usage : ./mygrep [option(s)] <motif(s)> <fichier(s)> \n");
-    printf("Cherche motif(s) dans <fichier(s)> \n");
-    printf("Exemple : ./mygrep -c \'Blabla\' fichier1.txt fichier2.txt \n\n");
-    printf("Options disponibles et leurs utilisations : \n\n-H  Affiche le menu d\'aide de la commande mygrep \n" ) ;
-    printf("-c  Affiche seulement le nombre de lignes contenant le motif dans fichier(s) \n") ;
-    printf("-l  n\'affiche pas les lignes trouvées mais le nom des fichiers avec au moins une correspondance \n") ;
-    printf("-L  n\'affiche pas les lignes trouvées mais le nom des fichiers avec aucune correspondance \n") ;
-    printf("-v  inverse la correspondance \n") ;
+    printf("Usage : ./mygrep [OPTION(S)] <MOTIF(S)> <FICHIER(S)> \n\n");
+    printf("Cherche <MOTIF(S)> dans <FICHIER(S)> \n\n");
+    printf("EXEMPLE : ./mygrep -c \'Blabla\' fichier1.txt fichier2.txt \n\n");
+    printf("OPTIONS disponibles et leurs utilisations : \n\n") ;
+    printf("\033[36;01m-H \033[00m Affiche le menu d\'aide de la commande mygrep \n" ) ;
+    printf("\033[36;01m-c \033[00m Affiche seulement le nombre de lignes contenant le motif dans fichier(s) \n") ;
+    printf("\033[36;01m-l \033[00m N\'affiche pas les lignes trouvées mais le nom des fichiers avec au moins une correspondance \n") ;
+    printf("\033[36;01m-L \033[00m N\'affiche pas les lignes trouvées mais le nom des fichiers avec aucune correspondance \n") ;
+    printf("\033[36;01m-v \033[00m Inverse la mise en correspondance , si correspondance trouvée n'affiche pas la ligne \n") ;
+    printf("\033[36;01m-e \033[34mmotif \033[00m Utiliser le motif indiqué, possibilié d'ajouter plusieurs motifs avec cette option \n") ;
+    printf("\033[36;01m-i \033[00m Ignore les différences de casse (majuscules/minuscules) \n") ;
+    printf("\033[36;01m-n \033[00m Préfixe chaque ligne par son numéro dans le fichier d'entrée \n") ;
+    printf("\033[36;01m-h \033[00m Ne pas afficher le nom des fichiers dans les résultats \n") ;
+    printf("\033[36;01m-A \033[34mnum \033[00m Affiche après chaque correspondance les num lignes se trouvant après la correspondance dans le fichier (=AFTER) \n") ;
+    printf("\033[36;01m-B \033[34mnum \033[00m Affiche avant chaque correspondance les num lignes se trouvant avant la correspondance dans le fichier (=BEFORE) \n") ;
+    printf("\033[36;01m-AB \033[34mnum \033[00m Affiche autour de chaque correspondance les num lignes se trouvant avant et après dans le fichier (=AFTER & BEFORE) \n") ;
     printf("\n");
     return ;
 }

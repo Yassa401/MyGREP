@@ -47,7 +47,6 @@ int main(int argc,char **argv){
 
     /* s'il y a au moins une option qui existe, teste si liste_options n'est pas une chaine vide */
     if ( *(liste_options) != 0 ){
-        fprintf(stderr,"traitement avec options \n") ;
         if (existe_option(liste_options,'H')){
             free(liste_options) ;
             exit(EXIT_SUCCESS) ;
@@ -71,7 +70,6 @@ int main(int argc,char **argv){
     }
     /* sinon on recherche un seul motif dans plusieurs fichiers*/
     else{
-        fprintf(stderr,"traitement sans options \n") ;
         recherche_fichiers(argc, argv, motifs, nb_motifs, indice_arg, liste_options, option_a_b) ;
     }
     free(option_a_b) ;

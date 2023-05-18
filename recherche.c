@@ -38,11 +38,46 @@ void affiche_n_lignes(FILE * fichier, char * nom_fichier, int n, int existe_opti
 			i = 0 ;
             acc_lignes += 1 ;
             if (!existe_option_h)
-                fprintf(stderr,"\033[36;01m%s\033[34m:", nom_fichier) ;
+                fprintf(stderr,"\033[36;01m%s\033[34m-", nom_fichier) ;
             if (existe_option_n)
-                fprintf(stderr,"\033[32m%d\033[34m:",indice_ligne + acc_lignes) ;
+                fprintf(stderr,"\033[32m%d\033[34m-",indice_ligne + acc_lignes) ;
             fprintf(stderr,"\033[00m%s \n",ligne) ;
         }
+	}
+    fprintf(stderr,"\n") ;
+	free(ligne) ;
+	return ;
+}
+
+void affiche_n_lignes_avant(FILE * fichier, char * nom_fichier, int n, int existe_option_h, int existe_option_n, int indice_ligne){
+	char car ;
+	int i = 0 ;
+	int acc_lignes = 0 ;
+    int indice = 0 ;
+	char * ligne = (char *) calloc( 200,sizeof(char) ) ;
+    fprintf(stderr,"\n") ;
+    rewind(fichier); /* tête de lecture qui passe au début du fichier */
+	car = fgetc(fichier) ;
+    while(car != EOF && acc_lignes < n){
+		if(car == '\n'){
+			*(ligne + i) = '\0' ;
+			i = 0 ;
+            indice += 1 ;
+            if ( indice >= (indice_ligne - n) && indice <= (indice_ligne - 1) ){
+                acc_lignes += 1 ;
+                if (!existe_option_h)
+                    fprintf(stderr,"\033[36;01m%s\033[34m-", nom_fichier) ;
+                if (existe_option_n)
+                    fprintf(stderr,"\033[32m%d\033[34m-", indice) ;
+                fprintf(stderr,"\033[00m%s \n",ligne) ;
+			}
+            
+		}
+		else{
+			*(ligne + i) = car ;
+			i += 1 ;
+		}
+		car = fgetc(fichier) ;
 	}
 	free(ligne) ;
 	return ;
@@ -213,6 +248,11 @@ void recherche_fichier(char * nom_fichier ,FILE * fichier, char ** motifs, int n
                 if ( *(motif) == '^' && *(motif + strlen(motif) - 1) == '$' ){
                     if ( chercher_motif_debut_fin(motif, ligne, existe_option_i) ){
                         if (!existe_option_v){
+                            if (option_a_b->existe_option_B){
+                                affiche_n_lignes_avant(fichier, nom_fichier, option_a_b->n_B, existe_option_h, existe_option_n, indice_ligne) ;
+                                fsetpos(fichier, &pos_fin) ;
+                            }
+
                             if (!existe_option_h) /* on affiche le nom du fichier */
                                 printf("\033[31;01m%s\033[34m:", nom_fichier) ;
                             if (existe_option_n)
@@ -234,6 +274,10 @@ void recherche_fichier(char * nom_fichier ,FILE * fichier, char ** motifs, int n
                     if ( *(motif) == '^'){
                         if ( chercher_motif_debut(motif, ligne, existe_option_i) ){
                             if (!existe_option_v){
+                                if (option_a_b->existe_option_B){
+                                    affiche_n_lignes_avant(fichier, nom_fichier, option_a_b->n_B, existe_option_h, existe_option_n, indice_ligne) ;
+                                    fsetpos(fichier, &pos_fin) ;
+                                }
                                 if (!existe_option_h) /* on affiche le nom du fichier */
                                     printf("\033[31;01m%s\033[34m:", nom_fichier) ;
                                 if (existe_option_n)
@@ -254,6 +298,10 @@ void recherche_fichier(char * nom_fichier ,FILE * fichier, char ** motifs, int n
                     if ( *(motif + strlen(motif) - 1) == '$'){
                         if ( chercher_motif_fin(motif, ligne, existe_option_i) ){
                             if (!existe_option_v){
+                                if (option_a_b->existe_option_B){
+                                    affiche_n_lignes_avant(fichier, nom_fichier, option_a_b->n_B, existe_option_h, existe_option_n, indice_ligne) ;
+                                    fsetpos(fichier, &pos_fin) ;
+                                }
                                 if (!existe_option_h) /* on affiche le nom du fichier */
                                     printf("\033[31;01m%s\033[34m:", nom_fichier) ;
                                 if (existe_option_n)
@@ -274,6 +322,10 @@ void recherche_fichier(char * nom_fichier ,FILE * fichier, char ** motifs, int n
                     else {
                         if ( chercher_motif(motif, ligne, existe_option_i) ){
                             if (!existe_option_v){
+                                if (option_a_b->existe_option_B){
+                                    affiche_n_lignes_avant(fichier, nom_fichier, option_a_b->n_B, existe_option_h, existe_option_n, indice_ligne) ;
+                                    fsetpos(fichier, &pos_fin) ;
+                                }
                                 if (!existe_option_h) /* on affiche le nom du fichier */
                                     printf("\033[31;01m%s\033[34m:", nom_fichier) ;
                                 if (existe_option_n)
@@ -294,9 +346,14 @@ void recherche_fichier(char * nom_fichier ,FILE * fichier, char ** motifs, int n
                 }
                 indice_motif += 1 ;
             }
-            if (existe_option_v && !motif_trouve) /* si parcours tous les motifs sans trouver un dans ligne , affiche ligne */
-                printf("\033[31;01m%s\033[34m:\033[00m%s \n",nom_fichier ,ligne) ;
+            if (existe_option_v && !motif_trouve){ /* si parcours tous les motifs sans trouver un dans ligne , affiche ligne */
+                if (!existe_option_h)
+                    printf("\033[31;01m%s\033[34m:", nom_fichier) ;
+                if (existe_option_n)
+                    printf("\033[32m%d\033[34m:",indice_ligne) ;
 
+                printf("\033[00m%s \n",ligne) ;
+            }
             car =fgetc(fichier) ;
         }
         /* si plusieurs saut de lignes on les ignorent */
@@ -377,8 +434,14 @@ void recherche_fichier(char * nom_fichier ,FILE * fichier, char ** motifs, int n
                 }
                 indice_motif += 1 ;
             }
-            if (existe_option_v && !motif_trouve) /* si parcours tous les motifs sans trouver un dans ligne , affiche ligne */
-                printf("\033[31;01m%s\033[34m:\033[00m%s \n",nom_fichier ,ligne) ;
+            if (existe_option_v && !motif_trouve){ /* si parcours tous les motifs sans trouver un dans ligne , affiche ligne */
+                if (!existe_option_h)
+                    printf("\033[31;01m%s\033[34m:", nom_fichier) ;
+                if (existe_option_n)
+                    printf("\033[32m%d\033[34m:",indice_ligne) ;
+
+                printf("\033[00m%s \n",ligne) ;
+            }    
         }
     }
     free(ligne) ;

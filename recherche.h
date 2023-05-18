@@ -5,6 +5,8 @@
 
 void affiche_n_lignes(FILE * fichier, char * nom_fichier, int n, int existe_option_h, int existe_option_n, int indice_ligne) ;
 
+void affiche_n_lignes_avant(FILE * fichier, char * nom_fichier, int n, int existe_option_h, int existe_option_n, int indice_ligne) ;
+
 int chercher_motif(char * motif, char * ligne, int existe_option_i) ;
 
 int chercher_motif_debut(char * motif, char * ligne, int existe_option_i) ;
