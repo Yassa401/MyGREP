@@ -45,13 +45,14 @@ int main(int argc,char **argv){
     */
     indice_arg += 1 ;
 
-
+    /* s'il y a au moins une option qui existe, teste si liste_options n'est pas une chaine vide */
     if ( *(liste_options) != 0 ){
+        fprintf(stderr,"traitement avec options \n") ;
         if (existe_option(liste_options,'H')){
             free(liste_options) ;
             exit(EXIT_SUCCESS) ;
         }
-        if ( existe_option(liste_options,'c') || existe_option(liste_options,'L') || existe_option(liste_options,'l') || existe_option(liste_options,'v') ){
+        if ( existe_option(liste_options,'c') || existe_option(liste_options,'L') || existe_option(liste_options,'l')){
             if(existe_option(liste_options,'L'))
                     recherche_fichiers_option_L(argc, argv, motifs, nb_motifs, indice_arg, liste_options) ;
 
@@ -61,19 +62,18 @@ int main(int argc,char **argv){
                 else { 
                     if(existe_option(liste_options,'c'))
                         recherche_fichiers_option_c(argc, argv, motifs, nb_motifs, indice_arg, liste_options) ;
-                    else{
-                        if(existe_option(liste_options, 'v'))
-                            recherche_fichiers_option_v(argc, argv, indice_arg) ;
-                    }
                 }
             }
         }           
+        else{
+        recherche_fichiers(argc, argv, motifs, nb_motifs, indice_arg, liste_options, option_a_b) ;
+        }
     }
+    /* sinon on recherche un seul motif dans plusieurs fichiers*/
     else{
+        fprintf(stderr,"traitement sans options \n") ;
         recherche_fichiers(argc, argv, motifs, nb_motifs, indice_arg, liste_options, option_a_b) ;
     }
-    recherche_fichiers(argc, argv, motifs, nb_motifs, indice_arg, liste_options, option_a_b) ;
-
     free(option_a_b) ;
     free(liste_options) ;
     free(motifs) ;
