@@ -17,8 +17,4 @@ void recherche_fichier(char * nom_fichier , FILE * fichier, char ** motifs, int 
 
 void recherche_fichiers(int argc ,char **argv, char ** motifs, int nb_motifs, int indice_arg, char * liste_options, option_A_B * option_a_b) ;
 
-void recherche_fichier_option_v(char * nom_fichier ,FILE * fichier, char ** motifs, int nb_motifs, char * liste_options) ;
-
-void recherche_fichiers_option_v(int argc ,char **argv, int indice_arg) ;
-
 #endif
