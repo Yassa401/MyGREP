@@ -178,7 +178,7 @@ int chercher_motif_fin(char * motif , char * ligne, int existe_option_i){
 int chercher_motif_debut_fin(char * motif, char * ligne, int existe_option_i){
     int i = 1;
     if (existe_option_i){
-        if ( *(motif + i) == *(ligne + i - 1)){
+        if ( *(motif + i) == *(ligne + i - 1) || *(motif + i) + 'a' - 'A' != *(ligne + i - 1 ) || *(motif + i) + 'A' - 'a' != *(ligne + i - 1) ){
             for ( i = 2 ; i < (int) (strlen(motif) - 1) ; i++ ){
             /*On arrete si deux caracteres au meme indice sont differents*/
             if ( *(motif + i) != *(ligne + i - 1) && (*(motif + i) + 'a' - 'A') != *(ligne + i - 1) && (*(motif + i) + 'A' - 'a') != *(ligne + i - 1))
@@ -377,6 +377,9 @@ void recherche_fichier(char * nom_fichier ,FILE * fichier, char ** motifs, int n
                 if ( *(motif) == '^' && *(motif + strlen(motif) - 1) == '$' ){
                     if ( chercher_motif_debut_fin(motif, ligne, existe_option_i) ){
                         if (!existe_option_v){
+                            if (option_a_b->existe_option_B){
+                                affiche_n_lignes_avant(fichier, nom_fichier, option_a_b->n_B, existe_option_h, existe_option_n, indice_ligne) ;
+                            }
                             if (!existe_option_h) /* on affiche le nom du fichier */
                                 printf("\033[31;01m%s\033[34m:", nom_fichier) ;
                             if (existe_option_n)
@@ -392,6 +395,9 @@ void recherche_fichier(char * nom_fichier ,FILE * fichier, char ** motifs, int n
                     if ( *(motif) == '^'){
                         if ( chercher_motif_debut(motif, ligne, existe_option_i) ){
                             if (!existe_option_v){
+                                if (option_a_b->existe_option_B){
+                                    affiche_n_lignes_avant(fichier, nom_fichier, option_a_b->n_B, existe_option_h, existe_option_n, indice_ligne) ;
+                                }
                                 if (!existe_option_h) /* on affiche le nom du fichier */
                                     printf("\033[31;01m%s\033[34m:", nom_fichier) ;
                                 if (existe_option_n)
@@ -406,6 +412,9 @@ void recherche_fichier(char * nom_fichier ,FILE * fichier, char ** motifs, int n
                     if ( *(motif + strlen(motif) - 1) == '$'){
                         if ( chercher_motif_fin(motif, ligne, existe_option_i) ){
                             if (!existe_option_v){
+                                if (option_a_b->existe_option_B){
+                                    affiche_n_lignes_avant(fichier, nom_fichier, option_a_b->n_B, existe_option_h, existe_option_n, indice_ligne) ;
+                                }
                                 if (!existe_option_h) /* on affiche le nom du fichier */
                                     printf("\033[31;01m%s\033[34m:", nom_fichier) ;
                                 if (existe_option_n)
@@ -420,6 +429,9 @@ void recherche_fichier(char * nom_fichier ,FILE * fichier, char ** motifs, int n
                     else {
                         if ( chercher_motif(motif, ligne, existe_option_i) ){
                             if (!existe_option_v){
+                                if (option_a_b->existe_option_B){
+                                    affiche_n_lignes_avant(fichier, nom_fichier, option_a_b->n_B, existe_option_h, existe_option_n, indice_ligne) ;
+                                }
                                 if (!existe_option_h) /* on affiche le nom du fichier */
                                     printf("\033[31;01m%s\033[34m:", nom_fichier) ;
                                 if (existe_option_n)
