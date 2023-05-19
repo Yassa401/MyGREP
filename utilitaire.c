@@ -33,7 +33,6 @@ void print_help(){
     printf("\033[36;01m-h \033[00m Ne pas afficher le nom des fichiers dans les résultats \n") ;
     printf("\033[36;01m-A \033[34mnum \033[00m Affiche après chaque correspondance les num lignes se trouvant après la correspondance dans le fichier (=AFTER) \n") ;
     printf("\033[36;01m-B \033[34mnum \033[00m Affiche avant chaque correspondance les num lignes se trouvant avant la correspondance dans le fichier (=BEFORE) \n") ;
-    printf("\033[36;01m-AB \033[34mnum \033[00m Affiche autour de chaque correspondance les num lignes se trouvant avant et après dans le fichier (=AFTER & BEFORE) \n") ;
     printf("\n");
     return ;
 }
@@ -116,7 +115,7 @@ char * traitement_option(int argc ,char **argv, char *** motif, int * nb_motif ,
                 option_a_b->existe_option_A = 1 ;
                 if (optarg != NULL){
                     option_a_b->n_A = atoi(optarg) ;
-                    if (option_a_b->n_A == 0){
+                    if (option_a_b->n_A <= 0){
                         fprintf(stderr,"Entrez une valeur positive pour l'argument -A \n") ;
                         free(option_a_b) ;
                         free(liste_options) ;
@@ -128,7 +127,7 @@ char * traitement_option(int argc ,char **argv, char *** motif, int * nb_motif ,
                 option_a_b->existe_option_B = 1 ;
                 if (optarg != NULL){
                     option_a_b->n_B = atoi(optarg) ;
-                    if (option_a_b->n_B == 0){
+                    if (option_a_b->n_B <= 0){
                         fprintf(stderr,"Entrez une valeur positive pour l'argument -B \n") ;
                         free(option_a_b) ;
                         free(liste_options) ;
