@@ -1,5 +1,5 @@
 # MyGREP
-Version personnel de la commande grep sur linux
+Version personnel de la commande UNIX grep 
 
 ## Compilation 
 commande : make
