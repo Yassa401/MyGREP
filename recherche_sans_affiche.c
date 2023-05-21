@@ -147,12 +147,16 @@ void recherche_fichiers_option_c(int argc , char **argv, char ** motifs, int nb_
         if (existe_option(liste_options, 'v') ){
             recherche_fichier_sans_affiche(fichier , motifs, nb_motifs, &compte_ligne, &nb_lignes_totale , existe_option_i) ;
             /* Le nom du fichier se trouve dans argv[i] */
-            printf("\033[35;01m%s\033[34m:\033[00m%d \n",*(argv + i), nb_lignes_totale - compte_ligne ) ;
+            if (!existe_option(liste_options, 'h'))
+                printf("\033[35;01m%s\033[34m:",*(argv + i)) ;
+            printf("\033[00m%d \n", nb_lignes_totale - compte_ligne  ) ;
         }
         else{
             if( recherche_fichier_sans_affiche(fichier , motifs, nb_motifs, &compte_ligne, &nb_lignes_totale, existe_option_i ) ){
                 /* Le nom du fichier se trouve dans argv[i] */
-                printf("\033[35;01m%s\033[34m:\033[00m%d \n",*(argv + i), compte_ligne ) ;
+                if (!existe_option(liste_options, 'h'))
+                    printf("\033[35;01m%s\033[34m:",*(argv + i)) ;
+                printf("\033[00m%d \n", compte_ligne  ) ;
             }
         }
 
