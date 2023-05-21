@@ -1,6 +1,5 @@
 CC=gcc
 CFLAGS= -W -Wall -std=c90 -pedantic -O2
-LFLAGS=
 
 all : mygrep
 

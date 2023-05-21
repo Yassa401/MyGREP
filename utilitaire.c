@@ -9,9 +9,11 @@ Date de création : 15/02/2023
 #include "utilitaire.h"
 #include "recherche_sans_affiche.h"
 
-void usage(int argc, char **argv, char * liste_options){
+void usage(int argc, char **argv, char * liste_options, option_A_B * option_a_b){
     if (argc < 3 && !existe_option(liste_options, 'H')){
         printf("Usage: %s <motif> <fichier1> [<fichier2> ...] \n",*(argv)) ;
+        free(option_a_b) ;
+        free(liste_options) ;
         exit(EXIT_SUCCESS) ;
     }
     return ;
@@ -46,6 +48,7 @@ char * traitement_option(int argc ,char **argv, char *** motif, int * nb_motif ,
     liste_options = (char *) malloc( 12 * sizeof(char) ) ;
     if (liste_options == NULL){
         printf("Erreur dans l'allocation de la memoire \n") ;
+        free(option_a_b) ;
         exit(EXIT_FAILURE) ;
     }
     val = getopt(argc, argv, opstring) ;
@@ -54,7 +57,7 @@ char * traitement_option(int argc ,char **argv, char *** motif, int * nb_motif ,
             case 'H' :
                 * (liste_options + i) = 'H' ;
                 i++ ;
-                /*si l'option H est mentionne on traite plus les autres options
+                /*si l'option H est mentionnée on ne traite plus les autres options
                 et on affiche le menu d'aide */
                 print_help() ;
                 continuer = 1 ;
@@ -94,7 +97,9 @@ char * traitement_option(int argc ,char **argv, char *** motif, int * nb_motif ,
                         motifs = (char **) malloc( sizeof(char *) ) ;
                         if (motifs == NULL){
                             fprintf(stderr,"erreur dans l'allocation mémoire \n") ;
-                            exit(1) ;
+                            free(option_a_b) ;
+                            free(liste_options) ;
+                            exit(EXIT_FAILURE) ;
                         }
                         *nb_motif += 1 ;
                     }
@@ -103,10 +108,11 @@ char * traitement_option(int argc ,char **argv, char *** motif, int * nb_motif ,
                         motifs = (char **) realloc( motifs , *nb_motif * sizeof(char *) ) ;
                         if (motifs == NULL){
                             fprintf(stderr,"erreur dans l'allocation mémoire \n") ;
-                            exit(1) ;
+                            free(option_a_b) ;
+                            free(liste_options) ;
+                            exit(EXIT_FAILURE) ;
                         }
                     }
-                    /* fprintf(stderr,"optarg %s \n",optarg) ; */
                     motifs[*nb_motif-1] = optarg ; 
                 }               
                 i++ ;
@@ -119,6 +125,7 @@ char * traitement_option(int argc ,char **argv, char *** motif, int * nb_motif ,
                         fprintf(stderr,"Entrez une valeur positive pour l'argument -A \n") ;
                         free(option_a_b) ;
                         free(liste_options) ;
+                        free(motifs) ;
                         exit(EXIT_FAILURE) ;
                     }
                 }
@@ -131,6 +138,7 @@ char * traitement_option(int argc ,char **argv, char *** motif, int * nb_motif ,
                         fprintf(stderr,"Entrez une valeur positive pour l'argument -B \n") ;
                         free(option_a_b) ;
                         free(liste_options) ;
+                        free(motifs) ;
                         exit(EXIT_FAILURE) ;
                     }
                 }
@@ -140,6 +148,7 @@ char * traitement_option(int argc ,char **argv, char *** motif, int * nb_motif ,
                 fprintf(stderr,"argument manquant pour l'option %c \n", optopt) ;
                 free(option_a_b) ;
                 free(liste_options) ;
+                free(motifs) ;
                 exit(EXIT_FAILURE) ;
         }
         val = getopt(argc, argv, opstring) ;

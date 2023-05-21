@@ -10,11 +10,6 @@ Date de création : 26/02/2023
 #include "utilitaire.h"
 
 
-/*! Fonction qui récupère ligne par ligne de un fichier donné
- * et cherche le motif dans chaque ligne
- * renvoie 1 si au moins une ligne trouvees
- * sinon renvoie 0
- */
 int recherche_fichier_sans_affiche(FILE * fichier, char ** motifs, int nb_motifs, int * compte_ligne, int * nb_lignes_totale, int existe_option_i){
     int i = 0 , nb_totale = 0 ;
     int indice_motif = 0 ;
@@ -148,7 +143,7 @@ void recherche_fichiers_option_c(int argc , char **argv, char ** motifs, int nb_
             exit(EXIT_FAILURE) ;
         }
         /*si fichier ouvert, on cherche le motif la dedans en faisant 
-        appel a la fonction precedente */
+        appel à la fonction precedente */
         if (existe_option(liste_options, 'v') ){
             recherche_fichier_sans_affiche(fichier , motifs, nb_motifs, &compte_ligne, &nb_lignes_totale , existe_option_i) ;
             /* Le nom du fichier se trouve dans argv[i] */
@@ -179,7 +174,7 @@ void recherche_fichiers_option_L(int argc, char ** argv, char ** motifs, int nb_
             exit(EXIT_FAILURE) ;
         }
         /*si fichier ouvert, on cherche le motif la dedans en faisant 
-        appel a la fonction precedente */
+        appel à la fonction precedente */
         if (existe_option(liste_options, 'v') ){
             if (recherche_fichier_sans_affiche(fichier , motifs, nb_motifs, &compte_ligne, &nb_lignes_totale, existe_option_i)){
             /* Le nom du fichier se trouve dans argv[i] */
@@ -211,7 +206,7 @@ void recherche_fichiers_option_l(int argc, char ** argv, char ** motifs, int nb_
             exit(EXIT_FAILURE) ;
         }
         /*si fichier ouvert, on cherche le motif la dedans en faisant 
-        appel a la fonction precedente */
+        appel à la fonction precedente */
         if (existe_option(liste_options, 'v') ){
             if ( !recherche_fichier_sans_affiche(fichier , motifs, nb_motifs, &compte_ligne, &nb_lignes_totale, existe_option_i )){
             /* Le nom du fichier se trouve dans argv[i] */

@@ -83,10 +83,6 @@ void affiche_n_lignes_avant(FILE * fichier, char * nom_fichier, int n, int exist
 	return ;
 }
 
-/*! Fonction qui parcourt la ligne en recherche du motif
- * renvoie 1 si le motif se trouve dans la ligne
- * renvoie 0 sinon
- */
 int chercher_motif(char * motif, char * ligne, int existe_option_i){
     int i, j = 0;
     /* si on ignore la casse*/
@@ -129,10 +125,6 @@ int chercher_motif(char * motif, char * ligne, int existe_option_i){
     return 0 ;
 }
 
-/*! Fonction qui cherche le motif au debut de la ligne
- * si c'est le cas on renvoie 1
- * sinon 0
- */
 int chercher_motif_debut(char * motif, char * ligne, int existe_option_i){
     int i ;
     if (existe_option_i){
@@ -150,10 +142,6 @@ int chercher_motif_debut(char * motif, char * ligne, int existe_option_i){
     return 1 ;
 }
 
-/*! Fonction qui cherche le motif a la fin de ligne
- * si c'est le cas on renvoie 1
- * sinon 0
- */
 int chercher_motif_fin(char * motif , char * ligne, int existe_option_i){
     int i , j ;
     j = strlen(ligne) - 1 ;
@@ -209,10 +197,6 @@ int chercher_motif_debut_fin(char * motif, char * ligne, int existe_option_i){
     }
 }
 
-/*! Fonction qui récupère ligne par ligne de un fichier donné
- * et cherche le motif dans chaque ligne
- * ne renvoie rien
- */
 void recherche_fichier(char * nom_fichier ,FILE * fichier, char ** motifs, int nb_motifs, char * liste_options, option_A_B * option_a_b){
     int i = 0 , indice_ligne = 0 ; /* indice_ligne stocke le numéro de ligne */
     int indice_motif = 0 ; /* indice qui indique quel motif parmi les motifs cherche le programme*/
@@ -261,7 +245,6 @@ void recherche_fichier(char * nom_fichier ,FILE * fichier, char ** motifs, int n
                             printf("\033[00m%s \n",ligne) ;
 
                             if(option_a_b->existe_option_A){
-                                /*fprintf(stderr,"option A existe -> %d \n", option_a_b->n_A) ; */
                                 affiche_n_lignes(fichier, nom_fichier, option_a_b->n_A, existe_option_h, existe_option_n, indice_ligne) ;
                                 fsetpos(fichier, &pos_fin) ;    
                             }
@@ -286,7 +269,6 @@ void recherche_fichier(char * nom_fichier ,FILE * fichier, char ** motifs, int n
                                 printf("\033[00m%s \n",ligne) ;
 
                                 if(option_a_b->existe_option_A){
-                                    /*fprintf(stderr,"option A existe -> %d \n", option_a_b->n_A) ; */
                                     affiche_n_lignes(fichier, nom_fichier, option_a_b->n_A, existe_option_h, existe_option_n, indice_ligne) ;
                                     fsetpos(fichier, &pos_fin) ;    
                                 }
@@ -310,7 +292,6 @@ void recherche_fichier(char * nom_fichier ,FILE * fichier, char ** motifs, int n
                                 printf("\033[00m%s \n",ligne) ; 
 
                                 if(option_a_b->existe_option_A){
-                                    /*fprintf(stderr,"option A existe -> %d \n", option_a_b->n_A) ; */
                                     affiche_n_lignes(fichier, nom_fichier, option_a_b->n_A, existe_option_h, existe_option_n, indice_ligne) ;
                                     fsetpos(fichier, &pos_fin) ;    
                                 }
@@ -334,7 +315,6 @@ void recherche_fichier(char * nom_fichier ,FILE * fichier, char ** motifs, int n
                                 printf("\033[00m%s \n",ligne) ;
 
                                 if(option_a_b->existe_option_A){
-                                    /*fprintf(stderr,"option A existe -> %d \n", option_a_b->n_A) ; */
                                     affiche_n_lignes(fichier, nom_fichier, option_a_b->n_A, existe_option_h, existe_option_n, indice_ligne) ;
                                     fsetpos(fichier, &pos_fin) ;    
                                 }
@@ -460,10 +440,6 @@ void recherche_fichier(char * nom_fichier ,FILE * fichier, char ** motifs, int n
     return ;
 }
 
-/*! Fonction qui recupere fichier par fichier dans les arguments donnés
- * et cherche le motif dans chacun des fichiers
- * ne renvoie rien
- */
 void recherche_fichiers(int argc ,char **argv, char ** motifs, int nb_motifs, int indice_arg, char * liste_options, option_A_B * option_a_b){
     int i ;
     FILE * fichier = NULL ;
